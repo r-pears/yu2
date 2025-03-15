@@ -13,3 +13,8 @@ A React-based web application that allows users to explore recipes using TheMeal
 - ⚛️ React.js
 - 🎨 CSS (with media queries for responsiveness)
 - 🌍 TheMealDB API
+
+## 🚀 Installation
+1. Clone the repository
+2. Install dependencies: npm install
+3. Run the project: npm start
