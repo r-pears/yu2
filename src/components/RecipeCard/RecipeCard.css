@@ -32,3 +32,9 @@
 .details-button:hover {
   background-color: #e5533d;
 }
+
+@media (max-width: 767px) {
+  .recipe-card h3 {
+    font-size: 18px;
+  }
+}

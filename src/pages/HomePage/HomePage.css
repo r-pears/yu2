@@ -4,8 +4,32 @@
 }
 
 .recipe-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
   gap: 20px;
+  justify-content: center;
+  margin-top: 20px;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (min-width: 1024px) {
+  .recipe-list {
+    grid-template-columns: repeat(3, 1fr);
+    place-items: center;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .recipe-list {
+    grid-template-columns: repeat(2, 1fr);
+    place-items: center;
+  }
+}
+
+@media (max-width: 767px) {
+  .recipe-list {
+    grid-template-columns: 1fr;
+    place-items: center;
+  }
 }
