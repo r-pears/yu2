@@ -31,8 +31,14 @@ const RecipeDetail = () => {
         ← Back
       </button>
       <h2>{recipe.strMeal}</h2>
-      <h3><strong>Area:</strong> {recipe.strArea}</h3>
-      <img src={recipe.strMealThumb} alt={recipe.strMeal} className="recipe-image" />
+      <h3>
+        <strong>Area:</strong> {recipe.strArea}
+      </h3>
+      <img
+        src={recipe.strMealThumb}
+        alt={recipe.strMeal}
+        className="recipe-image"
+      />
 
       <h3>Ingredients</h3>
       <ul>
