@@ -6,6 +6,9 @@ import "./HomePage.css";
 
 const HomePage = () => {
   const [recipes, setRecipes] = useState([]);
+  const [showCategoryFilter, setShowCategoryFilter] = useState(true);
+  const [showSearchBar, setShowSearchBar] = useState(true);
+  const [showBackButton, setShowBackButton] = useState(false);
 
   useEffect(() => {
     fetchRandomRecipes();
@@ -37,6 +40,8 @@ const HomePage = () => {
     const response = await fetch(url);
     const data = await response.json();
     setRecipes(data.meals || []);
+    setShowCategoryFilter(false); 
+    setShowBackButton(true); // Show back button when search is performed
   };
 
   const handleFilterByCategory = async (category) => {
@@ -49,21 +54,38 @@ const HomePage = () => {
     const response = await fetch(url);
     const data = await response.json();
     setRecipes(data.meals || []);
+    setShowSearchBar(false);
+    setShowBackButton(true); // Show back button when category is selected
   };
 
+  const handleBack = () => {
+    window.location.reload(); // Reload the page to reset the state
+  }
+
   return (
-    <div className="homepage">
-      <h2>Recipe Explorer</h2>
-      <SearchBar onSearch={handleSearch} />
-      <CategoryFilter onFilter={handleFilterByCategory} />
-      <div className="recipe-list">
+    <main className="homepage">
+      <header>
+        {showBackButton && (
+          <button onClick={handleBack} className="back-button">
+            ← Back
+          </button>
+        )}
+        <h1>Recipe Explorer</h1>
+      </header>
+      <nav>
+        {showSearchBar &&
+        <SearchBar onSearch={handleSearch} />}
+        {showCategoryFilter && 
+        <CategoryFilter onFilter={handleFilterByCategory} />}
+      </nav>
+      <section className="recipe-list">
         {recipes.length > 0 ? (
           recipes.map((recipe) => <RecipeCard key={recipe.idMeal} recipe={recipe} />)
         ) : (
           <p>No recipes found</p>
         )}
-      </div>
-    </div>
+      </section>
+    </main>
   );
 };
 

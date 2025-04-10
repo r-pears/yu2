@@ -15,16 +15,18 @@ const CategoryFilter = ({ onFilter }) => {
   };
 
   return (
-    <div className="category-filter">
+    <section className="category-filter">
       <select onChange={(e) => onFilter(e.target.value)}>
         <option value="">All Categories</option>
         {categories.map((category) => (
-          <option key={category.idCategory} value={category.strCategory}>
+          <option 
+            key={category.idCategory} 
+            value={category.strCategory}>
             {category.strCategory}
           </option>
         ))}
       </select>
-    </div>
+    </section>
   );
 };
 
