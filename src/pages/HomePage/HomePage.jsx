@@ -9,6 +9,7 @@ const HomePage = () => {
   const [showCategoryFilter, setShowCategoryFilter] = useState(true);
   const [showSearchBar, setShowSearchBar] = useState(true);
   const [showBackButton, setShowBackButton] = useState(false);
+  // const navigate = useNavigate();
 
   useEffect(() => {
     fetchRandomRecipes();
@@ -59,7 +60,9 @@ const HomePage = () => {
   };
 
   const handleBack = () => {
-    window.location.reload(); // Reload the page to reset the state
+    setShowCategoryFilter(true); // Show category filter again
+    setShowSearchBar(true); // Show search bar again
+    setShowBackButton(false); // Hide back button
   }
 
   return (
