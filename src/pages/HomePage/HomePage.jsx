@@ -16,32 +16,53 @@ const HomePage = () => {
   }, []);
 
   const fetchRandomRecipes = async () => {
-    let fetchedRecipes = [];
-    for (let i = 0; i < 6; i++) {
-      const response = await fetch("https://www.themealdb.com/api/json/v1/1/random.php");
-      const data = await response.json();
-      fetchedRecipes.push(data.meals[0]);
+    // error handling with trycatch
+    try {
+      let fetchedRecipes = [];
+      for (let i = 0; i < 6; i++) {
+        const response = await fetch(
+          "https://www.themealdb.com/api/json/v1/1/random.php"
+        );
+        // check if the response is ok
+        if (!response.ok) {
+          throw new Error("Failed to fetch random recipes");
+        }
+        const data = await response.json();
+        fetchedRecipes.push(data.meals[0]);
+      }
+      setRecipes(fetchedRecipes);
+    } catch (error) {
+      console.error("Error fetching random recipes:", error);
     }
-    setRecipes(fetchedRecipes);
   };
 
   const handleSearch = async (query, type) => {
     let url = "";
-    if (type === "name") {
-      url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`;
-    } else if (type === "ingredient") {
-      url = `https://www.themealdb.com/api/json/v1/1/filter.php?i=${query}`;
-    } else if (type === "letter" && query.length === 1) {
-      url = `https://www.themealdb.com/api/json/v1/1/search.php?f=${query}`;
-    } else {
-      alert("For first letter search, enter only one letter!");
-      return;
+    // for readability, use a switch statement
+    switch (type) {
+      case "name":
+        url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`;
+        break;
+      case "ingredient":
+        url = `https://www.themealdb.com/api/json/v1/1/filter.php?i=${query}`;
+        break;
+      case "letter":
+        if (query.length === 1) {
+          url = `https://www.themealdb.com/api/json/v1/1/search.php?f=${query}`;
+        } else {
+          alert("For first letter search, enter only one letter!");
+          return;
+        }
+        break;
+      default:
+        alert("Invalid search type!");
+        return;
     }
 
     const response = await fetch(url);
     const data = await response.json();
     setRecipes(data.meals || []);
-    setShowCategoryFilter(false); 
+    setShowCategoryFilter(false);
     setShowBackButton(true); // Show back button when search is performed
   };
 
@@ -50,20 +71,28 @@ const HomePage = () => {
       fetchRandomRecipes(); // If no category is selected, fetch random recipes
       return;
     }
-
-    const url = `https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`;
-    const response = await fetch(url);
-    const data = await response.json();
-    setRecipes(data.meals || []);
-    setShowSearchBar(false);
-    setShowBackButton(true); // Show back button when category is selected
+    // trycatch for error handling
+    try {
+      const url = `https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`;
+      const response = await fetch(url);
+      // check if the response is ok
+      if (!response.ok) {
+        throw new Error("Failed to fetch recipes by category");
+      }
+      const data = await response.json();
+      setRecipes(data.meals || []);
+      setShowSearchBar(false);
+      setShowBackButton(true); // Show back button when category is selected
+    } catch (error) {
+      console.error("Error fetching recipes by category:", error);
+    }
   };
 
   const handleBack = () => {
     setShowCategoryFilter(true); // Show category filter again
     setShowSearchBar(true); // Show search bar again
     setShowBackButton(false); // Hide back button
-  }
+  };
 
   return (
     <main className="homepage">
@@ -75,15 +104,18 @@ const HomePage = () => {
         )}
         <h1>Recipe Explorer</h1>
       </header>
-      <nav>
-        {showSearchBar &&
-        <SearchBar onSearch={handleSearch} />}
-        {showCategoryFilter && 
-        <CategoryFilter onFilter={handleFilterByCategory} />}
-      </nav>
+      {/* this isnt a nav */}
+      <section>
+        {showSearchBar && <SearchBar onSearch={handleSearch} />}
+        {showCategoryFilter && (
+          <CategoryFilter onFilter={handleFilterByCategory} />
+        )}
+      </section>
       <section className="recipe-list">
         {recipes.length > 0 ? (
-          recipes.map((recipe) => <RecipeCard key={recipe.idMeal} recipe={recipe} />)
+          recipes.map((recipe) => (
+            <RecipeCard key={recipe.idMeal} recipe={recipe} />
+          ))
         ) : (
           <p>No recipes found</p>
         )}
